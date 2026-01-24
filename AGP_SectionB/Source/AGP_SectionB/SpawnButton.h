@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -14,27 +14,33 @@ class AGP_SECTIONB_API ASpawnButton : public AActor
 public:
 	ASpawnButton();
 
+	// Useful for Gameplay Debugger
+	bool IsButtonPressed() const { return bButtonPressed; }
+	bool AreActorsActive() const { return bActorsActive; }
+
 protected:
 	virtual void BeginPlay() override;
 
-	// Trigger volume you walk into
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button")
 	UBoxComponent* Trigger;
 
-	// Actors to hide at start and reveal when pressed (set in Details)
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Button")
 	TArray<AActor*> ActorsToReveal;
 
-	// Prevent pressing more than once
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button")
 	bool bUsed = false;
 
-	// Overlap callback
+	// ✅ state variables (for debugger)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button|State")
+	bool bButtonPressed = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button|State")
+	bool bActorsActive = false;
+
 	UFUNCTION()
 	void OnTriggerBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	// Reveal all actors
 	void RevealActors();
 };

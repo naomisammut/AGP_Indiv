@@ -28,11 +28,13 @@ void ASpawnButton::BeginPlay()
 	for (AActor* A : ActorsToReveal)
 	{
 		if (!A) continue;
-
 		A->SetActorHiddenInGame(true);
 		A->SetActorEnableCollision(false);
 		A->SetActorTickEnabled(false);
 	}
+
+	bButtonPressed = false;
+	bActorsActive = false;
 }
 
 void ASpawnButton::OnTriggerBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -42,16 +44,19 @@ void ASpawnButton::OnTriggerBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	if (bUsed) return;
 	if (!OtherActor) return;
 
-	// Only react to player character
 	if (!OtherActor->IsA(ACharacter::StaticClass()))
 		return;
 
 	bUsed = true;
+	bButtonPressed = true;
+
 	RevealActors();
 }
 
 void ASpawnButton::RevealActors()
 {
+	bool bRevealedAny = false;
+
 	for (AActor* A : ActorsToReveal)
 	{
 		if (!A) continue;
@@ -59,5 +64,8 @@ void ASpawnButton::RevealActors()
 		A->SetActorHiddenInGame(false);
 		A->SetActorEnableCollision(true);
 		A->SetActorTickEnabled(true);
+		bRevealedAny = true;
 	}
+
+	bActorsActive = bRevealedAny;
 }

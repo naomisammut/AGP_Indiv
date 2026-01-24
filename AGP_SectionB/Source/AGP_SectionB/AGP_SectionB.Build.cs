@@ -21,7 +21,7 @@ public class AGP_SectionB : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayDebugger" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"AGP_SectionB",
