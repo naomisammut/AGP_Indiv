@@ -3,6 +3,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/Character.h"
+#include "CheckpointComponent.h"
+
 
 ADeathZone::ADeathZone()
 {
@@ -44,6 +46,15 @@ void ADeathZone::RespawnActor(AActor* ActorToRespawn)
 {
 	if (!ActorToRespawn) return;
 
+	// Respawn to checkpoint if available, else PlayerStart
+	if (UCheckpointComponent* CP = ActorToRespawn->FindComponentByClass<UCheckpointComponent>())
+	{
+		ACharacter* Char = Cast<ACharacter>(ActorToRespawn);
+		CP->Respawn(Char ? Char->GetController() : nullptr);
+		return;
+	}
+
+	// fallback to your old system if component not present
 	FVector TargetLoc = SpawnLocation;
 	FRotator TargetRot = FRotator::ZeroRotator;
 
@@ -57,7 +68,6 @@ void ADeathZone::RespawnActor(AActor* ActorToRespawn)
 		}
 	}
 
-	// Reset movement velocity if it’s a character
 	if (ACharacter* Char = Cast<ACharacter>(ActorToRespawn))
 	{
 		if (Char->GetCharacterMovement())
@@ -68,3 +78,4 @@ void ADeathZone::RespawnActor(AActor* ActorToRespawn)
 
 	ActorToRespawn->SetActorLocationAndRotation(TargetLoc, TargetRot, false, nullptr, ETeleportType::TeleportPhysics);
 }
+

@@ -2,6 +2,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/Character.h"
+#include "CheckpointComponent.h"
 
 AMovingPillar::AMovingPillar()
 {
@@ -56,6 +57,19 @@ void AMovingPillar::OnPlayerHit(
 	ACharacter* Player = Cast<ACharacter>(OtherActor);
 	if (!Player) return;
 
-	// Send player back to start
-	Player->SetActorLocation(Player->GetWorld()->GetAuthGameMode()->FindPlayerStart(Player->GetController())->GetActorLocation());
+	// Respawn to checkpoint if available, else PlayerStart
+	if (UCheckpointComponent* CP = Player->FindComponentByClass<UCheckpointComponent>())
+	{
+		CP->Respawn(Player->GetController());
+	}
+	else
+	{
+		// fallback (if you forgot to add the component)
+		if (Player->GetController() && Player->GetWorld()->GetAuthGameMode())
+		{
+			AActor* Start = Player->GetWorld()->GetAuthGameMode()->FindPlayerStart(Player->GetController());
+			if (Start) Player->SetActorLocation(Start->GetActorLocation());
+		}
+	}
 }
+
