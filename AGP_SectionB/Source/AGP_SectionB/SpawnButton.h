@@ -21,9 +21,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button")
 	UBoxComponent* Trigger;
 
-	// The bridge actor already placed in the level (set in Details)
+	// Actors to hide at start and reveal when pressed (set in Details)
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Button")
-	AActor* BridgeActor = nullptr;
+	TArray<AActor*> ActorsToReveal;
 
 	// Prevent pressing more than once
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Button")
@@ -35,6 +35,6 @@ protected:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	// Actually reveal bridge
-	void RevealBridge();
+	// Reveal all actors
+	void RevealActors();
 };
