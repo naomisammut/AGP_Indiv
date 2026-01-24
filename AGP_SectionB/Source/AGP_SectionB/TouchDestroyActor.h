@@ -25,7 +25,7 @@ protected:
 	UBoxComponent* Trigger;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Destroy")
-	float DestroyDelay = 1.0f;
+	float DestroyDelay = 0.5f;
 
 	bool bTriggered = false;
 	FTimerHandle DestroyTimer;
