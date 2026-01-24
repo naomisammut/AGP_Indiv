@@ -18,8 +18,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DeathZone")
 	UBoxComponent* Box;
 
-	// If true: send player to PlayerStart (recommended)
-	// If false: send player to SpawnLocation (you set it in editor)
+	// If true: send player to PlayerStart
+	// If false: send player to SpawnLocation (set in editor)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DeathZone")
 	bool bUsePlayerStart = true;
 

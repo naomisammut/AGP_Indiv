@@ -15,6 +15,10 @@ class AGP_SECTIONB_API ATouchDestroyActor : public AActor
 public:
 	ATouchDestroyActor();
 
+	// Called by DeathZone to "spawn" platforms back
+	UFUNCTION(BlueprintCallable, Category = "Reset")
+	void ResetPlatform();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -30,10 +34,14 @@ protected:
 	bool bTriggered = false;
 	FTimerHandle DestroyTimer;
 
+	// Remember initial state
+	FTransform InitialTransform;
+
 	UFUNCTION()
 	void OnTriggerBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	void DestroySelf();
+	// Instead of Destroy(), we disable/hide
+	void DisablePlatform();
 };
